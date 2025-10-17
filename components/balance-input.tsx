@@ -24,7 +24,6 @@ function BalanceInput({placeholder, tokenName, action, isLoading, onAction}: Bal
                             setBalanceText(text);
 
                             let number = parseFloat(text);
-                            console.log(number);
                         }
                     }}
                     placeholder={placeholder ?? ""}

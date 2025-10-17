@@ -93,7 +93,6 @@ class BalanceChecker {
         const { low, high } = result.balance;
         const balanceBigInt = uint256.uint256ToBN({ low, high });
 
-        console.log(balanceBigInt);
         return formattedBalance(balanceBigInt, 18)
     }
 }

@@ -22,7 +22,6 @@ export default function BackupScreen() {
         void setup();
 
         return () => {
-            console.log("sdkjfhsdlkjfh")
             setMnemonicWords([]);
         }
     }, [readMnemonic, setMnemonicWords]);

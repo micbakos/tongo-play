@@ -16,8 +16,6 @@ export default function RootLayout() {
         }
     }, [isInitialized, initialize]);
 
-    console.log(isInitialized, starknetAccount);
-
     if (!isInitialized) {
         return (
             <View style={{flex: 1, width: "100%", height: "100%", justifyContent: "center"}}>

@@ -4,8 +4,10 @@ import {useEffect, useState} from "react";
 import {AddressView} from "@/components/address-view";
 import {IconSymbol} from "@/components/ui/icon-symbol";
 import {useAccountStore} from "@/stores/useAccountStore";
+import {useMnemonicStore} from "@/stores/useMnemonicStore";
 import TongoAccountView from "@/components/tongo-account-view";
 import {ProgressButton} from "@/components/progress-button";
+import {useRouter} from "expo-router";
 import TokenBalance from "@/components/token-balance";
 
 export type AccountViewProps = {
@@ -21,9 +23,11 @@ function AccountView({starknetAccount}: AccountViewProps) {
         isDeployed,
         tongoBalance,
         deployStarknetAccount,
-        associateTongoAccount,
+        createTongoAccount,
         nuke
     } = useAccountStore();
+    const { mnemonicWords } = useMnemonicStore();
+    const router = useRouter();
 
     useEffect(() => {
         if (tongoAccount) {
@@ -52,6 +56,11 @@ function AccountView({starknetAccount}: AccountViewProps) {
                 </View>
 
                 <AddressView address={starknetAccount.address}/>
+                {!!(mnemonicWords && mnemonicWords.length) && (
+                    <View style={{ marginTop: 8 }}>
+                        <Button title="Backup phrase" onPress={() => router.push('/backup')} />
+                    </View>
+                )}
 
                 {!isDeployed && (
                     <ProgressButton
@@ -81,7 +90,7 @@ function AccountView({starknetAccount}: AccountViewProps) {
                         const associate = async () => {
                             setIsAssociating(true)
                             try {
-                                await associateTongoAccount();
+                                await createTongoAccount();
                             } catch (e) {
                                 console.log(e)
                             }

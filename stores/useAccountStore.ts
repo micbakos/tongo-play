@@ -22,7 +22,8 @@ export interface AccountState {
 
     initialize: () => Promise<void>;
 
-    // "restore wallet"
+    readMnemonic: () => Promise<string[]>;
+    // "(welcome) (wallet)"
     restoreFromMnemonic: (mnemonic: string[], save: boolean) => Promise<void>;
 
     restoreStarknetAccount: (privateKey: string) => Promise<void>;
@@ -97,8 +98,16 @@ export const useAccountStore = create<AccountState>((set, get) => ({
         }
     },
 
+    readMnemonic: async (): Promise<string[]> => {
+        const mnemonic = await getStringItem(OZ_ACCOUNT_MNEMONIC);
+        if (mnemonic) {
+            return mnemonicToWords(mnemonic);
+        } else {
+            return []
+        }
+    },
     restoreFromMnemonic: async (mnemonic: string[], save: boolean) => {
-        const { provider, associateTongoAccount } = get();
+        const {provider, associateTongoAccount} = get();
 
         console.log("Restoring account from mnemonic");
         const mnemonicPhrase = joinMnemonicWords(mnemonic)
@@ -163,9 +172,9 @@ export const useAccountStore = create<AccountState>((set, get) => ({
         const pubKey = await starknetAccount.signer.getPubKey();
 
         console.log("Deploying...")
-        const { transaction_hash } = await starknetAccount.deploySelf({
+        const {transaction_hash} = await starknetAccount.deploySelf({
             classHash: OZ_ACCOUNT_CLASS_HASH,
-            constructorCalldata: CallData.compile({ publicKey: pubKey }),
+            constructorCalldata: CallData.compile({publicKey: pubKey}),
         })
         console.log(`Deploying ${transaction_hash}...`)
         await provider.waitForTransaction(transaction_hash);

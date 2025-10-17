@@ -26,8 +26,6 @@ function AccountView({starknetAccount}: AccountViewProps) {
         createTongoAccount,
         nuke
     } = useAccountStore();
-    const { mnemonicWords } = useMnemonicStore();
-    const router = useRouter();
 
     useEffect(() => {
         if (tongoAccount) {
@@ -56,11 +54,6 @@ function AccountView({starknetAccount}: AccountViewProps) {
                 </View>
 
                 <AddressView address={starknetAccount.address}/>
-                {!!(mnemonicWords && mnemonicWords.length) && (
-                    <View style={{ marginTop: 8 }}>
-                        <Button title="Backup phrase" onPress={() => router.push('/backup')} />
-                    </View>
-                )}
 
                 {!isDeployed && (
                     <ProgressButton
